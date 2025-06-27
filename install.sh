@@ -5,7 +5,7 @@
 
 # Make sure yay is installed first.
 # The "extra" repository source is needed in Arch.
-if [[ -z $(pacman -Qe | grep yay) ]]; then
+if [[ -z $(pacman -Qe | grep "yay") ]]; then
     sudo pacman -S --needed git base-devel go
     git clone https://aur.archlinux.org/yay.git
     cd yay
@@ -14,8 +14,17 @@ if [[ -z $(pacman -Qe | grep yay) ]]; then
     rm -rf yay
 fi
 
+if [[ -z $(pacman -Qe | grep "yay") ]]; then
+    echo "Yay was not installed correctly, please fix the issue"
+    exit
+fi
+
 packages=""
 for line in $(cat ./requirements.txt); do
     packages="$packages $line"
 done
 yay -S $packages
+
+if [[ ! -z $(pacman -Qe | grep "xmonad") ]]; do
+    xmonad --recompile
+fi
