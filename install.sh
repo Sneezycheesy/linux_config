@@ -31,7 +31,6 @@ install_packages() {
       package_profiles=$(ls ./packages)
   fi
     
-  packages=""
   for package_file in $package_profiles; do
     packages=$(cat ./packages/${package_file})
     yay_packages=""
