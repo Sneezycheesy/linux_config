@@ -21,6 +21,10 @@ if [[ -z $(command -v yay) ]]; then
   rm -rf yay
 fi
 
+#
+# Install all packages based on profiles.
+# Installs all packages listed in packages folder by default.
+#
 install_packages() {
   #
   # When profiles are requested.
@@ -29,6 +33,8 @@ install_packages() {
   if [[ ! -z $@ ]]; then
     package_profiles=""
     for profile in $@; do
+      # Skip for loop when profile does not exist.
+      $(ls ./packages | grep -i $profile) || continue
       package_profiles="${package_profiles} ${profile}"
     done
   else
