@@ -1,0 +1,11 @@
+wine-staging
+lutris
+steam
+steam-native-runtime
+winetricks
+mono
+vulkan-icd-loader
+vulkan-radeon
+vulkan-headers
+dxvk-bin
+xwayland

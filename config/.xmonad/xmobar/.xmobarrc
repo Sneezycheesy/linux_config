@@ -1,0 +1,46 @@
+-- http://projects.haskell.org/xmobar/
+-- install xmobar with these flags: --flags="with_alsa" --flags="with_mpd" --flags="with_xft"  OR --flags="all_extensions"
+-- you can find weather location codes here: http://weather.noaa.gov/index.html
+Config
+  { font = "Share Tech Mono 15",
+    additionalFonts =
+      [ "Mononoki Nerd Font 15",
+        "FontAwesome 15"
+      ],
+    bgColor = "#0c1628",
+    fgColor = "#ffffff",
+    position = TopH 40,
+    iconRoot = "/home/joshii/.xmonad/xpm/",
+    lowerOnStart = False,
+    hideOnStart = False,
+    overrideRedirect = False,
+    pickBroadest = False,
+    allDesktops = True,
+    persistent = True,
+    commands =
+      [ -- Time and date
+        Run DateZone "<fc=#46d9ff><box type=Bottom width=2><fn=1>\xf073 </fn> %T (%A, %d %b %Y)</box></fc>" "nl_NL.utf8" "Europe/Amsterdam" "date" 10,
+        -- Network up and down
+        Run DynNetwork ["-t", "<fc=#98be65><box type=Bottom width=2><fn=2>\xf103</fn> <rx>kb <fn=2>\xf102</fn> <tx>kb</box></fc>"] 50,
+        -- Cpu usage in percent
+        Run Cpu ["-t", "<fc=#ecbe7b><box type=Bottom width=2><fn=1>\xf108  </fn><total>%</box></fc>", "-H", "50", "--high", "darkred"] 20,
+        -- Ram used number and percent
+        Run Memory ["-t", "<fc=#ff6c6b><box type=Bottom width=2><fn=2>\xe799 </fn><used>M (<usedratio>%)</box></fc>"] 20,
+        -- Disk space free
+        Run DiskU [("/", "<fc=#51afef><box type=Bottom width=2><fn=1>\xf0c7 </fn> <free> free</box></fc>")] [] 60,
+        -- Alsa for SINK VOLUME (speaker/headphones)
+        Run Alsa "default" "Master" ["-t", "<fn=2><status></fn><volume>%", "--", "-O", "", "-o", "\xfc5d ", "-h", "\xfa7d ", "-m", "\xfa7f ", "-l", "\xfa7e ", "-L", "12", "-C", "#FFF"],
+        -- ALSA for SOURCE VOLUME (Mic)
+        Run Alsa "default" "Capture" ["-t", "<fn=1><status></fn><volume>%", "--", "-O", "\xf130 ", "-o", "\xf131 ", "-C", "#FFF"],
+        -- Run music player daemon
+        -- Runs custom script to check for pacman updates.
+        -- This script is in my dotfiles repo in .local/bin.
+        -- , Run Com "/home/dt/.local/bin/pacupdate" [] "pacupdate" 36000
+        -- Runs a standard shell command 'uname -r' to get kernel version
+        -- Run Com "/home/joshii/.xmonad/scripts/sink_mute.sh" ["get"] "sink_mute" 10,
+        Run StdinReader
+      ],
+    sepChar = "%",
+    alignSep = "}{",
+    template = "  %StdinReader% } %date% { %cpu% | %memory% | %disku% | %dynnetwork% |  <fc=#d6ae11><box type=Bottom width=2>%alsa:default:Capture% %alsa:default:Master%</box></fc>  "
+  }
