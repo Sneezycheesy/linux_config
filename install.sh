@@ -5,11 +5,15 @@
 # Always use Yet Another Yaourt (YaY)
 ##########################################################################
 ##########################################################################
-trap "echo 'Cleaning up'; cd ..; rm -rf yay; exit" SIGINT
 if [[ -z $(command -v yay) ]]; then
   command -v git || sudo pacman -S git
+  # Should cloning git take way too long, clean up folder on interupt.
+  trap "rm -rf yay; exit" SIGINT
   git clone https://aur.archlinux.org/yay.git
+
   cd yay
+  # Should building with go take way too long, clean up folder in root directory on interrupt.
+  trap "echo 'Cleaning up yay folder'; cd ..; rm -rf yay; exit" SIGINT
   command -v go || sudo pacman -S go
   makepkg
   sudo pacman -U yay*.pkg.tar.zst
@@ -19,8 +23,8 @@ fi
 
 install_packages() {
   #
-  # When profiles are requested
-  # Only install those
+  # When profiles are requested.
+  # Only install those.
   #
   if [[ ! -z $@ ]]; then
     package_profiles=""
