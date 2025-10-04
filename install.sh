@@ -34,7 +34,7 @@ install_packages() {
     package_profiles=""
     for profile in $@; do
       # Skip for loop when profile does not exist.
-      $(ls ./packages | grep -i $profile) || continue
+      [ -f ./packages/${profile} ] || continue
       package_profiles="${package_profiles} ${profile}"
     done
   else
@@ -42,6 +42,7 @@ install_packages() {
   fi
     
   for package_file in $package_profiles; do
+    [ -f ./packages/${package_file} ] || continue
     packages=$(cat ./packages/${package_file})
     yay_packages=""
     for package in $packages; do
