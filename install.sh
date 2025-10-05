@@ -33,6 +33,8 @@ install_packages() {
   if [[ ! -z $@ ]]; then
     package_profiles=""
     for profile in $@; do
+      # Make it easy on the user - convert input to lower case
+      profile=${profile,,}
       # Skip for loop when profile does not exist.
       [ -f ./packages/${profile} ] || continue
       package_profiles="${package_profiles} ${profile}"
