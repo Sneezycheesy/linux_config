@@ -29,6 +29,11 @@ function start_steam() {
   wait_for_game_exit
 }
 
+###
+# Check for running games and keep script alive.
+#
+# @return void
+###
 function wait_for_game_exit() {
   # Waits until steam is no longer running any games, then closes it.
   # Waits for steam before checking for a game to be running.
@@ -47,8 +52,14 @@ function wait_for_game_exit() {
   kill_steam
 }
 
+###
+# Kill all packages launched by this script.
+#
+# @return void
+###
 function kill_steam() {
   # Close everything once the game is done.
+  pkill reaper
   pkill steam
   pkill envision
   pkill wivrn-server
