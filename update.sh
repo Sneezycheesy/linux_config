@@ -6,7 +6,7 @@
 ##################################################################################
 CONFIGS=$(ls -a ./config)
 
-if [[ -z $(command rsync) ]]; then
+if [[ -z $(command -v rsync) ]]; then
   yay -Syy && yay -S rsync
 fi
 
