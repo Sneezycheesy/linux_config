@@ -6,14 +6,14 @@
 # Then launch Steam, with the game.
 function start_steam() {
   game_id=${1,,}
-  if [ ! -z `pgrep -x steam` ]; then
-    steam_running=TRUE
+#  if [ ! -z `pgrep -x steam` ]; then
+#    steam_running=TRUE
 #    pkill -x steam
-    while [ ! -z $(pgrep -x steam) ]; do
-      echo "Closing steam..."
-      sleep 2
-    done
-  fi
+#    while [ ! -z $(pgrep -x steam) ]; do
+#      echo "Closing steam..."
+#      sleep 2
+#    done
+#  fi
   
   # Start WiVRN for the OpenXR connection.
   [[ ! -z `pgrep -if envision` ]] && pkill -if envision
