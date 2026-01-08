@@ -649,14 +649,15 @@ myManageHook = do
       className =? "steamwebhelper" --> delete,                                 -- Close steam news cause I don't care for it
       name      =? "Wine System Tray" --> delete,                             -- Close wine system tray as it's just a small rectangular overlay
       appName   =? "explorer.exe" --> delete,                             -- Close wine system tray as it's just a small rectangular overlay
-      appName   =? "blizzarderror.exe"  --> delete,
-      className      =? "mt - the dream.exe" --> unfloat]                               -- Sink the launcher so TERA can be rendered on top of it
+      --appName   =? "blizzarderror.exe"  --> delete,
+      className =? "ascension launcher.exe" --> unfloat,
+      className =? "arborea reborn.exe" --> unfloat]                               -- Sink the launcher so TERA can be rendered on top of it
       ++ [className =? game --> primaryScreenFloat | game <- myGames]               -- Grab games from an array and make them all fullscreen
       ++ [name =? steamGame --> unfloat | steamGame <- steamGames])
       <+>
       namedScratchpadManageHook myScratchpads
       where
-        primaryScreenFloat = (customFloating $ W.RationalRect 0 0.1 1 1)
+        primaryScreenFloat = (customFloating $ W.RationalRect 0.7 0.7 0.1 0.1)
         delete  = ask >>= doF . W.delete
         unfloat = ask >>= doF . W.sink
         name    = stringProperty "WM_NAME"
@@ -665,7 +666,7 @@ myManageHook = do
         myGames = ["starcitizen.exe",
                   "tera.exe",
                   "PortalWars-Linux-Shipping",
-                  "ascension.exe",
+                  --"ascension.exe",
                   "gw2-64.exe",
                   -- "wow.exe",
                   "steam_app_1944790", -- Train sim world 3
@@ -717,7 +718,7 @@ myStartupHook = do
       spawnOnce "picom",
       -- spawnOnce "~/.config/polybar/scripts/load_polybar.sh",
       spawnOnce "nextcloud --background",
-      -- spawnOnce "steam-native -silent",
+      spawnOnce "steam-native -silent",
       spawnOnce "thunderbird",
       spawnOnce "chromium",
       spawnOnce "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
