@@ -4,6 +4,8 @@
 # Primary examples: ETS2, ATS.
 # Use this script to wait for an active WiVRN connection.
 # Then launch Steam, with the game.
+driving_game_ids=("227300" "270880")
+
 function start_steam() {
   game_id=${1,,}
 #  if [ ! -z `pgrep -x steam` ]; then
@@ -18,6 +20,7 @@ function start_steam() {
   # Start WiVRN for the OpenXR connection.
   [[ ! -z `pgrep -if envision` ]] && pkill -if envision
   [[ ! -z `pgrep -if wivrn` ]] && pkill -if wivrn
+  [[ ${driving_game_ids[@]} =~ $game_id ]] && boxflat &
   corectrl & 
   envision --start &
 
@@ -84,13 +87,14 @@ function wait_for_game_exit() {
 function kill_steam() {
   # Close everything once the game is done.
   #pkill reaper
-  pkill steam
-  pkill envision
-  pkill wivrn-server
-  setxkbmap us -variant alt-intl
+  echo $game_id
+  [[ ! -z `pgrep -f boxflat` ]] && pkill -f boxflat 
+  pkill envision &&
+  pkill wivrn-server &&
+  setxkbmap us -variant alt-intl &&
   echo $steam_running
   [[ ! -z $(pgrep lutris-wrapper) ]] && pkill lutris-wrapper 
-  [ $steam_running ] && steam -silent
+#  [ $steam_running ] && steam -silent
   exit
 }
 

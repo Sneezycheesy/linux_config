@@ -7,15 +7,13 @@
 # Don't do anything while this is true. 
 # When WoW starts, the instances increases to 2. 
 # Once this is no longer true, kill the last instance to satisfy Lutris.
-### 
-while [[ $(pgrep -fc "World of Warcraft") -eq 1 ]]; do 
-  echo "Only battle.net runs";
-  sleep 5; 
-done 
+###
+while [[ -z $(pgrep WoW.exe) ]]; do
+  sleep 5;
+done
 
-while [[ $(pgrep -fc "World of Warcraft") -gt 1 ]]; do 
-  echo "WoW now running too";
-  sleep 5; 
-done 
-
+while [[ $(pgrep WoW.exe) ]]; do
+  sleep 5;
+done
+# closes lutris wrapper for WoW, closing any instance of Battle.net still running 
 pkill -f "World of Warcraft"

@@ -32,7 +32,7 @@ if [[ $1 == sink ]]; then
 		sink=$(pactl list sinks | grep -i "name:" | grep -i "media_electronics" | cut -d" " -f2);
 		#port="analog-output-lineout";
 	elif [[ $2 == headset ]]; then
-		sink=$(pactl list sinks | grep -i "name:" | grep -i "umc204hd" | grep -i "sink" | grep -i "line1" | tail -1 | cut -d" " -f2);
+		sink=$(pactl list sinks | grep -i "name:" | grep -i "umc204hd" | grep -i "sink" | cut -d" " -f2);
 		port="Line A"
 	elif [[ $2 == vr ]]; then
 		if [[ ! -z $3 ]]; then
@@ -52,21 +52,23 @@ if [[ $1 == sink ]]; then
 	[[ -z $sink ]] && sink=	$(pactl list sinks | grep -i "name:" | grep -i "Line1" | cut -d" " -f2);
         pactl set-default-sink $sink;
 
-	[ ! -z $port ] && pactl set-sink-port $sink $port
+	[[ ! -z $port ]] && pactl set-sink-port $sink $port
 	#xmonad --restart;
 #	pkill -USR1 polybar
 fi
 
 if [[ $1 == source ]]; then
 	if [[ $2 == headset ]]; then
-		source=$(pactl list sources | grep -i "name:" | grep -i "umc204hd" | grep -i 'mic1' | grep -i -v "monitor" | cut -d" "  -f2);
+		source=$(pactl list sources | grep -i "name:" | grep -i "umc204hd" | grep -i -v "monitor" | cut -d" "  -f2);
 	elif [[ $2 == record ]]; then
 		source="alsa_input.usb-OmniVision_Technologies__Inc._USB_Camera-B4.09.24.1-01.analog-surround-40";
 	elif [[ $2 == vr ]]; then
 	  if [[ ! -z $3 ]]; then
-            while [[ -z $source ]]; do
+            # If always run AFTER connecting to Envision the while loop isn't needed.
+            # This will break any app if "use microphone" is disabled on the headset.
+            #while [[ -z $source ]]; do
               source=$(pactl list sources | grep -i "name:" | grep -i $3 | grep -i -v "monitor" | cut -d" " -f2);
-	    done
+	    #done
           else
 	   source=$(pactl list sources | grep -i "name:" | grep -i "wivrn" | cut -d" "  -f2);
 	   [[ -z $source ]] && source=$(pactl list sources | grep -i "name:" | grep -i "alvr" | cut -d" "  -f2);
