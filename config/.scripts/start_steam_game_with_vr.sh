@@ -22,7 +22,7 @@ function start_steam() {
   [[ ! -z `pgrep -if wivrn` ]] && pkill -if wivrn
   [[ ${driving_game_ids[@]} =~ $game_id ]] && boxflat &
   corectrl & 
-  envision --start &
+  wivrn-dashboard &
 
   while [[ -z `pgrep wivrn` ]]; do
     sleep 2
@@ -48,7 +48,7 @@ function start_steam() {
   
   echo "Starting Steam game"
   setxkbmap us
-  steam-native -silent -applaunch ${game_id} &
+  steam -silent -applaunch ${game_id} &
   wait_for_game_exit
 
 }
@@ -89,7 +89,7 @@ function kill_steam() {
   #pkill reaper
   echo $game_id
   [[ ! -z `pgrep -f boxflat` ]] && pkill -f boxflat 
-  pkill envision &&
+  pkill wivrn-dashboard &&
   pkill wivrn-server &&
   setxkbmap us -variant alt-intl &&
   echo $steam_running
