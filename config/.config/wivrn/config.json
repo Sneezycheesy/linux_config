@@ -1,0 +1,22 @@
+{
+  "application": [
+    "bash",
+    "~/.scripts/start_vr.sh"
+  ],
+  "bit-depth": 8,
+  "debug-gui": false,
+  "encoder": [
+    {
+      "codec": "h264",
+      "encoder": "vaapi"
+    },
+    {
+      "codec": "h264",
+      "encoder": "vaapi"
+    }
+  ],
+  "hid-forwarding": false,
+  "openvr-compat-path": "/opt/xrizer",
+  "tcp-only": true,
+  "use-steamvr-lh": false
+}

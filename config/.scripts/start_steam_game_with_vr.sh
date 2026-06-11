@@ -1,54 +1,20 @@
 #!/usr/bin/bash
-# Manually launch Steam game that uses VR.
-# Not all games are happy with OpenXR (WiVRN) starting after the game itself.
-# Primary examples: ETS2, ATS.
-# Use this script to wait for an active WiVRN connection.
-# Then launch Steam, with the game.
-driving_game_ids=("227300" "270880")
+# Launches WiVRN for OpenXR VR games.
+# Sets the desired audio out- and input device.
+# Adds a watchdog to stop the VR connection when game exits.
 
 function start_steam() {
   game_id=${1,,}
-#  if [ ! -z `pgrep -x steam` ]; then
-#    steam_running=TRUE
-#    pkill -x steam
-#    while [ ! -z $(pgrep -x steam) ]; do
-#      echo "Closing steam..."
-#      sleep 2
-#    done
-#  fi
-  
-  # Start WiVRN for the OpenXR connection.
-  [[ ! -z `pgrep -if envision` ]] && pkill -if envision
-  [[ ! -z `pgrep -if wivrn` ]] && pkill -if wivrn
-  [[ ${driving_game_ids[@]} =~ $game_id ]] && boxflat &
+  # export environment variable to use on wivrn script once Wivrn connects to a client.
+  echo ${game_id} > ~/.scripts/game_id.txt
   corectrl & 
   wivrn-dashboard &
 
-  while [[ -z `pgrep wivrn` ]]; do
-    sleep 2
-  done
-  
-  while [[ -z `ss -tun | grep :9757` ]]; do
-    echo "No WiVRN connection active"
-    # Exit script is wivrn is closed.
-    if [[ -z $(pgrep wivrn) ]]; then
-      kill_steam
-    fi
-    sleep 5
-  done
-  echo "VR connected"
   # Set audio input and output to WiVRN device.
-  sh ~/.scripts/volume.sh sink vr wivr;
+  sh ~/.scripts/volume.sh sink speakers;
   sh ~/.scripts/volume.sh source vr wivrn;
-
-  # Give connection some time to settle down.
-  # This is a safeguard to prevent games like ETS2.
-  # From missing the active connection.
-  sleep 2
   
-  echo "Starting Steam game"
   setxkbmap us
-  steam -silent -applaunch ${game_id} &
   wait_for_game_exit
 
 }
@@ -89,12 +55,14 @@ function kill_steam() {
   #pkill reaper
   echo $game_id
   [[ ! -z `pgrep -f boxflat` ]] && pkill -f boxflat 
-  pkill wivrn-dashboard &&
   pkill wivrn-server &&
+  pkill wivrn-dashboard &&
   setxkbmap us -variant alt-intl &&
   echo $steam_running
   [[ ! -z $(pgrep lutris-wrapper) ]] && pkill lutris-wrapper 
 #  [ $steam_running ] && steam -silent
+  sh ~/.scripts/volume.sh sink headset
+  rm ~/.scripts/game_id.txt
   exit
 }
 

@@ -32,7 +32,7 @@ if [[ $1 == sink ]]; then
 		sink=$(pactl list sinks | grep -i "name:" | grep -i "media_electronics" | cut -d" " -f2);
 		#port="analog-output-lineout";
 	elif [[ $2 == headset ]]; then
-		sink=$(pactl list sinks | grep -i "name:" | grep -i "umc204hd" | grep -i "sink" | cut -d" " -f2);
+		sink=$(pactl list sinks | grep -i "name:" | grep -i "umc204hd" | cut -d" " -f2);
 		port="Line A"
 	elif [[ $2 == vr ]]; then
 		if [[ ! -z $3 ]]; then
