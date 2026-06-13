@@ -59,10 +59,10 @@ function kill_steam() {
   pkill wivrn-dashboard &&
   setxkbmap us -variant alt-intl &&
   echo $steam_running
-  [[ ! -z $(pgrep lutris-wrapper) ]] && pkill lutris-wrapper 
-#  [ $steam_running ] && steam -silent
   sh ~/.scripts/volume.sh sink headset
   rm ~/.scripts/game_id.txt
+  [[ ! -z $(pgrep lutris-wrapper) ]] && pkill lutris-wrapper 
+#  [ $steam_running ] && steam -silent
   exit
 }
 

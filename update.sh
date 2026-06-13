@@ -13,3 +13,6 @@ fi
 for config in $CONFIGS; do
   rsync -rP ./config/${config} ~/ 
 done
+
+# Replace the wivrn config string with the actual user.
+sed -i "/~\/.scripts\/start_vr.sh/c\\$HOME\/.scripts\/start_vr.sh" ~/.config/wivrn/config.json
