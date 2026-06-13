@@ -122,7 +122,7 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
              where
               h = 0.7
               w = 0.4
-              t = 0.8 -h
+              t = 0.1
               l = 0.2 
       spawnTerm = myTerminal ++ " --name term"
       findTerm = resource =? "term"
@@ -151,7 +151,7 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
       spawnCmus = "kitty --name 'cmus music player' -e cmus"
       findCmus = appName =? "cmus music player"
       spawnLutris = "lutris"
-      findLutris = className =? "Lutris"
+      findLutris = className =? "net.lutris.Lutris"
       manageLutris = nonFloating
       spawnTsm = "WINEPREFIX=/qvo/world-of-warcraft/ wine /qvo/world-of-warcraft/drive_c/Program Files (x86)/TradeSkillMaster Application/app/TSMApplication.exe"
       findTsm = appName =? "tsmapplication.exe"
@@ -346,7 +346,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- MUTING
       ((0, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SINK sink"), -- Toggle output mute
       ((modm, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"), -- Toggle input mute
-      ((control .|. alt, xK_m), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"), -- Toggle input mute
+      ((control .|. modm, xK_m), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"), -- Toggle input mute
       ((control, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle mpv"), -- Toggle mpv mute
       ((0, volumeDown), spawn $ "sh " ++ scriptDir ++ "volume.sh volume sink SINK -"), -- Increase output volume by 1%
       ((0, volumeUp), spawn $ "sh " ++ scriptDir ++ "volume.sh volume sink SINK +"), -- Decrease output volume by 1%
@@ -378,6 +378,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- -- SESSION
       ((modm .|. shift, xK_s), spawn "oblogout"),
       ((control .|. mod1Mask, xK_l), spawn $ "sh " ++ scriptDir ++ "lock.sh"),
+      ((modm, xK_l), spawn $ "sh " ++ scriptDir ++ "lock.sh"),
       -- Quit xmonad
       ((modm .|. shift, xK_KP_Subtract), io exitSuccess),
       -- Restart xmonad
@@ -394,7 +395,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       ((modm .|. alt, xK_q), spawn "qutebrowser"),
       ((modm .|. control, xK_q), spawn "qutebrowser --target private-window"),
       ((modm .|. alt, xK_s), spawn "skypeforlinux"),
-      ((modm .|. alt .|. control, xK_s), spawn "steam-native"),
+      ((modm .|. alt .|. control, xK_s), spawn "steam"),
       ((modm .|. alt, xK_t), spawn "telegram-desktop"),
       ((modm, xK_v), spawn "virtualbox"),
       ((modm, xK_w), spawn "VBoxManage startvm 'Winblows 10'"),
@@ -651,9 +652,11 @@ myManageHook = do
       appName   =? "explorer.exe" --> delete,                             -- Close wine system tray as it's just a small rectangular overlay
       --appName   =? "blizzarderror.exe"  --> delete,
       className =? "ascension launcher.exe" --> unfloat,
+      name =? "Elite - Dangerous (CLIENT)" --> doFullFloat,
       className =? "arborea reborn.exe" --> unfloat]                               -- Sink the launcher so TERA can be rendered on top of it
       ++ [className =? game --> primaryScreenFloat | game <- myGames]               -- Grab games from an array and make them all fullscreen
-      ++ [name =? steamGame --> unfloat | steamGame <- steamGames])
+      ++ [name =? steamGame --> unfloat | steamGame <- steamGames]     
+      ++ [name =? steamGame --> doF W.focusUp | steamGame <- steamGames])
       <+>
       namedScratchpadManageHook myScratchpads
       where
@@ -672,9 +675,11 @@ myManageHook = do
                   "steam_app_1944790", -- Train sim world 3
                   "steam_app_1623730", -- PALWORLD
                   "steam_app_238960", -- POE
-                  "steam_app_306130"]  -- ESO
+                  "steam_app_306130"] -- ESO
         steamGames = [ "Euro Truck Simulator 2",
-                       "American Truck Simulator" ]
+                       "American Truck Simulator",
+                       -- "Elite - Dangerous (CLIENT)", -- Elite Dangerous Game
+                       "elite launcher"] -- Elite Dangerous Launcher
 ------------------------------------------------------------------------
 -- Event handling
 
@@ -716,11 +721,10 @@ myStartupHook = do
       spawnOnce "xsetroot -cursor_name left_ptr",
       spawnOnce "xset -dpms && xset s off",
       spawnOnce "picom",
-      -- spawnOnce "~/.config/polybar/scripts/load_polybar.sh",
-      spawnOnce "nextcloud --background",
-      spawnOnce "steam-native -silent",
-      spawnOnce "thunderbird",
       spawnOnce "chromium",
+      spawnOnce "nextcloud --background",
+      spawnOnce "steam -silent",
+      spawnOnce "thunderbird",
       spawnOnce "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
     ]
 
