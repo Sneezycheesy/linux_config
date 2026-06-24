@@ -108,12 +108,13 @@ myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
 myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
+                 NS "signal" spawnSignal findSignal floatSignal,
                  NS "term" spawnTerm findTerm floatTerm,
                  NS "mail" spawnMail findMail manageMail,
                  NS "steam" spawnSteam findSteam floatSteam,
                  NS "cmus" spawnCmus findCmus floatTerm,
                  NS "lutris" spawnLutris findLutris manageLutris,
-                 NS "tsm" spawnTsm findTsm manageTsm,
+                 NS "tsm" findTsm manageTsm,
                  NS "corectrl" spawnCctrl findCctrl nonFloating]
     where
       spawnChromium = "chromium"
@@ -122,6 +123,14 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
              where
               h = 0.7
               w = 0.4
+              t = 0.1
+              l = 0.2 
+      spawnSignal = "signal-desktop"
+      findSignal = appName =? "signal"
+      floatSignal = customFloating $ W.RationalRect l t w h
+             where
+              h = 0.7
+              w = 0.6
               t = 0.1
               l = 0.2 
       spawnTerm = myTerminal ++ " --name term"
@@ -411,6 +420,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- Run xmessage with a summary of the default keybindings (useful for beginners)
       ((modm .|. shift, xK_slash), spawn ("echo \"" ++ help ++ "\" | xmessage -file -")),
       ((0, xK_Menu), namedScratchpadAction myScratchpads "social"),
+      ((modm, xK_Menu), namedScratchpadAction myScratchpads "signal"),
       ((modm, xK_m), namedScratchpadAction myScratchpads "mail"),
       ((modm, xK_s), namedScratchpadAction myScratchpads "steam"),
       ((modm, xK_c), namedScratchpadAction myScratchpads "cmus"),
@@ -640,6 +650,7 @@ myManageHook = do
       appName =? "Alert" <&&> className =? "thunderbird" --> (customFloating $ W.RationalRect 0.1 0.3 0.2 0.3),
       appName =? "Alert" <&&> className =? "thunderbird" --> doF (W.focusDown),
       appName =? "chromium" --> doF (W.shift "NSP"),
+      appName =? "signal" --> doF (W.shift "NSP"),
       className =? "tsmapplication.exe" --> doF (W.shift "NSP"),
       className =? "corectrl" --> doF (W.shift "NSP"),
       className =? "gimp" --> unfloat,
@@ -722,6 +733,7 @@ myStartupHook = do
       spawnOnce "xset -dpms && xset s off",
       spawnOnce "picom",
       spawnOnce "chromium",
+      spawnOnce "signal-desktop",
       spawnOnce "nextcloud --background",
       spawnOnce "steam -silent",
       spawnOnce "thunderbird",
