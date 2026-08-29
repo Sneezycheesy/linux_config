@@ -114,7 +114,7 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
                  NS "steam" spawnSteam findSteam floatSteam,
                  NS "cmus" spawnCmus findCmus floatTerm,
                  NS "lutris" spawnLutris findLutris manageLutris,
-                 NS "tsm" findTsm manageTsm,
+                 NS "tsm" spawnTsm findTsm manageTsm,
                  NS "corectrl" spawnCctrl findCctrl nonFloating]
     where
       spawnChromium = "chromium"
@@ -336,7 +336,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- Shrink the master area
       ((modm, xK_h), sendMessage Shrink),
       -- Expand the master area
-      ((modm, xK_l), sendMessage Expand),
+      ((modm .|. shift, xK_h), sendMessage Expand),
       -- Push window back into tiling
       ((modm, xK_t), withFocused $ windows . W.sink),
       -- Increment the number of windows in the master area
@@ -725,7 +725,7 @@ myStartupHook = do
     [ spawnOnce "sh /home/joshii/.screenlayouts/toggle_monitors.sh",
       spawnOnce "xdotool key super+q",
       spawnOnce "xdotool mousemove 960 540",
-      spawnOnce "alsactl store",
+      -- spawnOnce "alsactl store",
       spawnOnce "/usr/bin/numlockx on",
       spawnOnce "nitrogen --restore",
       spawnOnce "setxkbmap us -variant alt-intl &",
