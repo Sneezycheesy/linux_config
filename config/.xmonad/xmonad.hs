@@ -420,7 +420,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- Run xmessage with a summary of the default keybindings (useful for beginners)
       ((modm .|. shift, xK_slash), spawn ("echo \"" ++ help ++ "\" | xmessage -file -")),
       ((0, xK_Menu), namedScratchpadAction myScratchpads "social"),
-      ((modm, xK_Menu), namedScratchpadAction myScratchpads "signal"),
+      ((control, xK_Menu), namedScratchpadAction myScratchpads "signal"),
       ((modm, xK_m), namedScratchpadAction myScratchpads "mail"),
       ((modm, xK_s), namedScratchpadAction myScratchpads "steam"),
       ((modm, xK_c), namedScratchpadAction myScratchpads "cmus"),

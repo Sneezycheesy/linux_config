@@ -11,8 +11,8 @@ function start_steam() {
   wivrn-dashboard &
 
   # Set audio input and output to WiVRN device.
-  sh ~/.scripts/volume.sh sink speakers;
-  sh ~/.scripts/volume.sh source vr wivrn;
+  # sh ~/.scripts/volume.sh sink vr wivrn;
+  # sh ~/.scripts/volume.sh source vr wivrn;
   
   setxkbmap us
   wait_for_game_exit
@@ -60,6 +60,7 @@ function kill_steam() {
   setxkbmap us -variant alt-intl &&
   echo $steam_running
   sh ~/.scripts/volume.sh sink headset
+  sh ~/.scripts/volume.sh source record
   rm ~/.scripts/game_id.txt
   [[ ! -z $(pgrep lutris-wrapper) ]] && pkill lutris-wrapper 
 #  [ $steam_running ] && steam -silent

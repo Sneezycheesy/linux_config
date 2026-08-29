@@ -59,7 +59,7 @@ fi
 
 if [[ $1 == source ]]; then
 	if [[ $2 == headset ]]; then
-		source=$(pactl list sources | grep -i "name:" | grep -i "umc204hd" | grep -i -v "monitor" | cut -d" "  -f2);
+		source=$(pactl list sources | grep -i "name:" | grep -i "webcam" | grep -i -v "monitor" | cut -d" "  -f2);
 	elif [[ $2 == record ]]; then
 		source="alsa_input.usb-OmniVision_Technologies__Inc._USB_Camera-B4.09.24.1-01.analog-surround-40";
 	elif [[ $2 == vr ]]; then
