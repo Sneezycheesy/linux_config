@@ -9,6 +9,7 @@ function start_steam() {
   echo ${game_id} > ~/.scripts/game_id.txt
   corectrl & 
   wivrn-dashboard &
+  [[ -z $(pgrep boxflat) ]] && boxflat &
 
   # Set audio input and output to WiVRN device.
   # sh ~/.scripts/volume.sh sink vr wivrn;

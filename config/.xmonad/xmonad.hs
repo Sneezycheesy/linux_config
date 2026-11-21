@@ -122,7 +122,7 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
       floatChrom = customFloating $ W.RationalRect l t w h
              where
               h = 0.7
-              w = 0.4
+              w = 0.6
               t = 0.1
               l = 0.2 
       spawnSignal = "signal-desktop"
@@ -138,9 +138,9 @@ myScratchpads = [NS "social" spawnChromium findChrom floatChrom,
       floatTerm = customFloating $ W.RationalRect l t w h
              where
               h = 0.7
-              w = 0.7
-              t = 0.8 -h
-              l = 0.8 -w
+              w = 0.8
+              t = 0.1
+              l = 0.1
       spawnMail = "thunderbird"
       findMail = resource =? "Mail"
       manageMail = customFloating $ W.RationalRect l t w h
@@ -356,6 +356,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       ((0, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SINK sink"), -- Toggle output mute
       ((modm, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"), -- Toggle input mute
       ((control .|. modm, xK_m), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"), -- Toggle input mute
+      ((0, xF86XK_Calculator), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle SOURCE source"),
       ((control, mute), spawn $ "sh " ++ scriptDir ++ "volume.sh toggle mpv"), -- Toggle mpv mute
       ((0, volumeDown), spawn $ "sh " ++ scriptDir ++ "volume.sh volume sink SINK -"), -- Increase output volume by 1%
       ((0, volumeUp), spawn $ "sh " ++ scriptDir ++ "volume.sh volume sink SINK +"), -- Decrease output volume by 1%
@@ -420,7 +421,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} =
       -- Run xmessage with a summary of the default keybindings (useful for beginners)
       ((modm .|. shift, xK_slash), spawn ("echo \"" ++ help ++ "\" | xmessage -file -")),
       ((0, xK_Menu), namedScratchpadAction myScratchpads "social"),
+      ((0, xF86XK_HomePage), namedScratchpadAction myScratchpads "social"),
       ((control, xK_Menu), namedScratchpadAction myScratchpads "signal"),
+      ((control, xF86XK_HomePage), namedScratchpadAction myScratchpads "signal"),
       ((modm, xK_m), namedScratchpadAction myScratchpads "mail"),
       ((modm, xK_s), namedScratchpadAction myScratchpads "steam"),
       ((modm, xK_c), namedScratchpadAction myScratchpads "cmus"),
@@ -724,6 +727,7 @@ myStartupHook = do
   sequence_
     [ spawnOnce "sh /home/joshii/.screenlayouts/toggle_monitors.sh",
       spawnOnce "xdotool key super+q",
+      spawnOnce "xdotool key super+1",
       spawnOnce "xdotool mousemove 960 540",
       -- spawnOnce "alsactl store",
       spawnOnce "/usr/bin/numlockx on",
